@@ -33,6 +33,7 @@ export const analytics = {
   capture: (eventName: string, properties?: EventProperties) => {
     const prefixedEventName = `${EVENT_PREFIX}${eventName}`;
     posthog.capture(prefixedEventName, properties);
+    console.log(`Captured event: ${prefixedEventName} with properties: ${JSON.stringify(properties)}`);
   },
 
   /**
