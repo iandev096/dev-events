@@ -1,3 +1,5 @@
+import Navbar from "@/components/Navbar";
+import PageLayoutBackground from "@/components/PageLayoutBackground";
 import type { Metadata } from "next";
 import { Martian_Mono, Schibsted_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -27,7 +29,9 @@ export default function RootLayout({
       <body
         className={`${schibstedGrotesk.variable} ${martianMono.variable} min-h-screen antialiased`}
       >
-        {children}
+        <Navbar />
+        <PageLayoutBackground />
+        <main>{children}</main>
       </body>
     </html>
   );
