@@ -1,13 +1,13 @@
-import { doesSlugExist } from "@/app/server/db/event.model";
-import { uploadFile } from "@/app/server/lib/cloudinary";
-import { connectDB } from "@/app/server/lib/mongodb";
+import { doesSlugExist } from "@/app/_server/db/event.model";
+import { uploadFile } from "@/app/_server/lib/cloudinary";
+import { connectDB } from "@/app/_server/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
-import { Event } from "../../server/db";
+import { Event } from "../../_server/db";
 
 export async function GET(_req: NextRequest): Promise<NextResponse> {
   try {
     await connectDB();
-    const events = await Event.find().sort({ createdAt: -1 });
+    const events = await Event.find().sort({ createdAt: -1 }).lean();
     return NextResponse.json(
       { events, message: `${events.length} events fetched successfully` },
       { status: 200 },
