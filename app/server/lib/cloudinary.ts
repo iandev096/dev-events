@@ -21,7 +21,14 @@ export async function uploadFile(
           upload_preset: "dev-events",
         },
         (error, result) => {
-          if (error) reject(error);
+          if (error) {
+            reject(error);
+            return;
+          }
+          if (!result) {
+            reject(new Error("Cloudinary upload returned no result."));
+            return;
+          }
           resolve(result);
         },
       )
