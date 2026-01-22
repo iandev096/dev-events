@@ -55,6 +55,7 @@ function normalizeDate(dateStr: string): string {
 /**
  * Helper function to normalize time to 12-hour format (HH:MM AM/PM)
  * Handles various input formats and validates time ranges
+ * Always returns zero-padded hours for consistency
  */
 function normalizeTime(timeStr: string): string {
   const trimmed = timeStr.trim();
@@ -76,8 +77,8 @@ function normalizeTime(timeStr: string): string {
       throw new Error(`Invalid minute value: ${minutes}. Minutes must be between 0-59`);
     }
     
-    // Return normalized format with consistent spacing
-    return `${hours}:${match12hr[2]} ${period}`;
+    // Return normalized format with zero-padded hours and consistent spacing
+    return `${hours.toString().padStart(2, '0')}:${match12hr[2]} ${period}`;
   }
   
   // Try to parse 24-hour format (HH:MM)
@@ -100,7 +101,8 @@ function normalizeTime(timeStr: string): string {
     if (hours > 12) hours -= 12;
     if (hours === 0) hours = 12;
     
-    return `${hours}:${match24hr[2]} ${period}`;
+    // Return with zero-padded hours for consistency
+    return `${hours.toString().padStart(2, '0')}:${match24hr[2]} ${period}`;
   }
   
   throw new Error(`Invalid time format: ${timeStr}. Expected format: HH:MM AM/PM or HH:MM (24-hour)`);

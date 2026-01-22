@@ -27,13 +27,6 @@ declare global {
 // Get MongoDB connection string from environment variables
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Validate that MONGODB_URI is defined
-if (!MONGODB_URI) {
-  throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local'
-  );
-}
-
 /**
  * Initialize the global cache object if it doesn't exist
  * In production, the module is only loaded once, so this is a simple singleton
@@ -56,6 +49,13 @@ if (!global.mongoose) {
  * @returns {Promise<typeof mongoose>} The mongoose instance with an active connection
  */
 export async function connectDB(): Promise<typeof mongoose> {
+  // Validate that MONGODB_URI is defined
+  if (!MONGODB_URI) {
+    throw new Error(
+      'Please define the MONGODB_URI environment variable inside .env.local'
+    );
+  }
+
   // If we already have an active connection, return it immediately
   if (cached.conn) {
     return cached.conn;
