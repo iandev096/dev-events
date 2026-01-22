@@ -9,9 +9,7 @@ import { useEffect } from "react";
 export default function Home() {
 
   useEffect(() => {
-    analytics.capture('page_view', {
-      page: 'home'
-    });
+    analytics.capture('home_page_view');
   }, []);
 
   return (
