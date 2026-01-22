@@ -2,11 +2,17 @@
 
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
+import { analytics } from "@/lib/analytics";
 import { events } from "@/lib/constants/events";
+import { useEffect } from "react";
 
 export default function Home() {
 
-
+  useEffect(() => {
+    analytics.capture('page_view', {
+      page: 'home'
+    });
+  }, []);
 
   return (
     <section>
