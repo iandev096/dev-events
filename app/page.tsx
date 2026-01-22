@@ -1,8 +1,11 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
+import { cacheLife } from "next/cache";
 import { getEvents } from "./api/_ops/events";
 
 export default async function Home() {
+  "use cache";
+  cacheLife("hours");
   const fetchedEvents = await getEvents();
 
   return (

@@ -4,6 +4,11 @@ export async function getEvents(): Promise<IEvent[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/events`,
   );
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch events: ${response.statusText}`);
+  }
+
   const data = await response.json();
   return data.events as IEvent[];
 }

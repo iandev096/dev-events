@@ -1,3 +1,4 @@
+import { getSimilarEventsBySlug } from "@/app/_actions/event.actions";
 import { IEvent } from "@/app/_server/db";
 import { getEvent } from "@/app/api/_ops/events";
 import EventCard from "@/components/EventCard";
@@ -82,7 +83,7 @@ export default async function EventDetails({
 
   const bookings = 10;
 
-  const similarEvents: IEvent[] = [];
+  const similarEvents: IEvent[] | null = await getSimilarEventsBySlug(slug);
 
   return (
     <section id="event">
@@ -155,10 +156,13 @@ export default async function EventDetails({
       <div className="flex w-full flex-col gap-4 pt-20">
         <h2>Similar Events</h2>
         <div className="events">
-          {similarEvents.length > 0 &&
+          {similarEvents && similarEvents.length > 0 ? (
             similarEvents.map((similarEvent: IEvent) => (
               <EventCard key={similarEvent.title} {...similarEvent} />
-            ))}
+            ))
+          ) : (
+            <p>No similar events found</p>
+          )}
         </div>
       </div>
     </section>

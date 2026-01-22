@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import posthog from 'posthog-js';
+import posthog from "posthog-js";
 
 /**
  * Event prefix for all analytics events
  */
-const EVENT_PREFIX = 'DEV_EVENTS__';
+const EVENT_PREFIX = "DEV_EVENTS__";
 
 /**
  * Type definition for event properties
@@ -15,11 +15,11 @@ type EventProperties = Record<string, any>;
 /**
  * Client-side analytics facade for PostHog
  * Automatically prefixes all event names with "DEV_EVENTS_"
- * 
+ *
  * @example
  * ```typescript
  * import { analytics } from '@/lib/analytics';
- * 
+ *
  * analytics.capture('page_view', { page: 'home' });
  * // Sent as "DEV_EVENTS_page_view"
  * ```
@@ -33,7 +33,9 @@ export const analytics = {
   capture: (eventName: string, properties?: EventProperties) => {
     const prefixedEventName = `${EVENT_PREFIX}${eventName}`;
     posthog.capture(prefixedEventName, properties);
-    console.log(`Captured event: ${prefixedEventName} with properties: ${JSON.stringify(properties)}`);
+    console.log(
+      `Captured event: ${prefixedEventName} with properties: ${JSON.stringify(properties)}`,
+    );
   },
 
   /**
@@ -59,8 +61,18 @@ export const analytics = {
   setPersonProperties: (properties: EventProperties) => {
     posthog.setPersonProperties(properties);
   },
-};
 
+  /**
+   * Capture an error event
+   * @param error - The error to capture
+   */
+  captureException: (error: Error, properties?: EventProperties) => {
+    posthog.captureException(error, {
+      prefix: EVENT_PREFIX,
+      ...properties,
+    });
+  },
+};
 /**
  * Re-export the PostHog instance for advanced use cases
  * Use this only when you need direct access to PostHog methods
