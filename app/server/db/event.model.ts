@@ -54,25 +54,53 @@ function normalizeDate(dateStr: string): string {
 
 /**
  * Helper function to normalize time to 12-hour format (HH:MM AM/PM)
- * Handles various input formats
+ * Handles various input formats and validates time ranges
  */
 function normalizeTime(timeStr: string): string {
-  // If already in correct format, return as is
-  if (/^\d{1,2}:\d{2}\s?(AM|PM)$/i.test(timeStr.trim())) {
-    return timeStr.trim().toUpperCase();
+  const trimmed = timeStr.trim();
+  
+  // Check if already in 12-hour format with AM/PM
+  const match12hr = trimmed.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
+  if (match12hr) {
+    const hours = parseInt(match12hr[1]);
+    const minutes = parseInt(match12hr[2]);
+    const period = match12hr[3].toUpperCase();
+    
+    // Validate hour range (1-12 for 12-hour format)
+    if (hours < 1 || hours > 12) {
+      throw new Error(`Invalid hour value: ${hours}. Hours must be between 1-12 for 12-hour format`);
+    }
+    
+    // Validate minute range (0-59)
+    if (minutes < 0 || minutes > 59) {
+      throw new Error(`Invalid minute value: ${minutes}. Minutes must be between 0-59`);
+    }
+    
+    // Return normalized format with consistent spacing
+    return `${hours}:${match12hr[2]} ${period}`;
   }
   
   // Try to parse 24-hour format (HH:MM)
-  const match24hr = timeStr.match(/^(\d{1,2}):(\d{2})$/);
+  const match24hr = trimmed.match(/^(\d{1,2}):(\d{2})$/);
   if (match24hr) {
     let hours = parseInt(match24hr[1]);
-    const minutes = match24hr[2];
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const minutes = parseInt(match24hr[2]);
     
+    // Validate 24-hour format ranges
+    if (hours < 0 || hours > 23) {
+      throw new Error(`Invalid hour value: ${hours}. Hours must be between 0-23 for 24-hour format`);
+    }
+    
+    if (minutes < 0 || minutes > 59) {
+      throw new Error(`Invalid minute value: ${minutes}. Minutes must be between 0-59`);
+    }
+    
+    // Convert to 12-hour format
+    const period = hours >= 12 ? 'PM' : 'AM';
     if (hours > 12) hours -= 12;
     if (hours === 0) hours = 12;
     
-    return `${hours}:${minutes} ${period}`;
+    return `${hours}:${match24hr[2]} ${period}`;
   }
   
   throw new Error(`Invalid time format: ${timeStr}. Expected format: HH:MM AM/PM or HH:MM (24-hour)`);
