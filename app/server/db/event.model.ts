@@ -27,7 +27,7 @@ export interface IEvent extends Document {
  * Helper function to generate URL-friendly slug from title
  * Converts to lowercase, replaces spaces/special chars with hyphens
  */
-function generateSlug(title: string): string {
+export function generateSlug(title: string): string {
   return title
     .toLowerCase()
     .trim()
@@ -35,6 +35,12 @@ function generateSlug(title: string): string {
     .replace(/\s+/g, "-") // Replace spaces with hyphens
     .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
     .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
+}
+
+export async function doesSlugExist(title: string): Promise<boolean> {
+  const slug = generateSlug(title);
+  const event = await Event.findOne({ slug });
+  return event !== null;
 }
 
 /**
