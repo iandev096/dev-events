@@ -1,8 +1,13 @@
+'use client';
+
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
 import { events } from "@/lib/constants/events";
 
 export default function Home() {
+
+
+
   return (
     <section>
       <h1 className="text-center">The Hub for Every Dev <br /> Event You Can't Miss</h1>
