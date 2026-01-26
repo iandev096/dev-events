@@ -1,16 +1,21 @@
-'use client';
-
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { events } from "@/lib/constants/events";
+import { cacheLife } from "next/cache";
+import { getEvents } from "./api/_ops/events";
 
-export default function Home() {
-
+export default async function Home() {
+  "use cache";
+  cacheLife("hours");
+  const fetchedEvents = await getEvents();
 
   return (
     <section>
-      <h1 className="text-center">The Hub for Every Dev <br /> Event You Can't Miss</h1>
-      <p className="text-center mt-5">Hackathons, Conferences, Workshops, and More</p>
+      <h1 className="text-center">
+        The Hub for Every Dev <br /> Event You Can't Miss
+      </h1>
+      <p className="text-center mt-5">
+        Hackathons, Conferences, Workshops, and More
+      </p>
 
       <ExploreBtn />
 
@@ -18,7 +23,7 @@ export default function Home() {
         <h3>Featured Events</h3>
 
         <ul id="events" className="events">
-          {events.map((event) => (
+          {fetchedEvents.map((event) => (
             <li key={event.title} className="list-none">
               <EventCard {...event} />
             </li>
